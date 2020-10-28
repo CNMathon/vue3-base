@@ -7,8 +7,8 @@ import { AppConfig } from '@/config/app'
 import { loadAllPlugins } from '@/plugins'
 import { registeGlobalComponent } from '@/components/index'
 
-/** 导入第三方插件 */
-import '@/plugins'
+// 语言国际化方案
+import '@/i18n/index'
 
 /** 将全局静态配置注入到应用中,可以通过 this.a读取,比 provide 和 inject 手动注入更方便  */
 const app: ReturnType<typeof createApp> = createApp(App)
@@ -20,4 +20,7 @@ loadAllPlugins(app)
 /** 自动注册全局组件  */
 registeGlobalComponent(app)
 
-app.use(store).use(router).mount('#app')
+app
+  .use(store)
+  .use(router)
+  .mount('#app')

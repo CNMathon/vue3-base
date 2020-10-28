@@ -2,7 +2,9 @@
 import { message } from 'ant-design-vue'
 
 const AppConfig = {
-  $message: message,
-  a: 1
+  $message: message
 }
-export { AppConfig }
+const StaticConfig = {
+  IconfontURL: '//at.alicdn.com/t/font_2092412_rr3rb5vksd8.js'
+}
+export { AppConfig, StaticConfig }

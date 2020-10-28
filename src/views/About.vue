@@ -1,31 +1,29 @@
 <template>
   <div ref="root" class="about">
-    <h1>{{ c }}</h1>
-    <h2>{{ b.pageName }}</h2>
-    <hello-world />
-    <test-demo />
-    <router-link to="/about/me">kjfkjsk</router-link>
-    <router-view />
-    <self-button />
+    about.page
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import TestDemo from '../components/TestDemo.vue'
-import HelloWorld from '../components/HelloWorld.vue'
-import SelfButton from '../components/SelfButton.vue'
+import { defineComponent, reactive, ref, onMounted } from 'vue'
 
 const About = defineComponent({
   setup() {
+    onMounted(() => {
+      console.log('mounted')
+    })
+    const state = { name: 'init' }
+    const state1 = reactive({
+      name: '1111'
+    })
+    const changeState = () => {
+      state.name = 'hahahah'
+      state1.name = 'chageddddd'
+      console.log(state)
+    }
     const c = ref(0)
     const root = ref(null)
-    return { root, c }
-  },
-  components: {
-    TestDemo,
-    HelloWorld,
-    SelfButton
+    return { root, c, state, changeState, state1 }
   },
   data() {
     return {

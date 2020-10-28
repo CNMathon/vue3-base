@@ -1,4 +1,53 @@
 /**
+ * @description 异步加载  一段js放在 header
+ * @param {object} url - js 的 url
+ * @param {function} callback - 成功回调
+ * @returns { promise<any>}} promise
+ */
+export function loadScript(url: string) {
+  return new Promise(() => {
+    try {
+      const script: any = document.createElement('script')
+      script.type = 'text/javascript'
+      if (script.readyState) {
+        //IE
+        script.onreadystatechange = function() {
+          if (script.readyState == 'loaded' || script.readyState == 'complete') {
+            script.onreadystatechange = null
+            Promise.resolve(0)
+          }
+        }
+      } else {
+        //Others: Firefox, Safari, Chrome, and Opera
+        script.onload = function() {
+          Promise.resolve(0)
+        }
+      }
+      script.src = url
+      document.body.appendChild(script)
+    } catch (e) {
+      Promise.reject(e)
+    }
+  })
+}
+
+/**
+ * @description 通过值查找对象的 key
+ * @param {object} target - 要查找的对象
+ * @param {string} value - 要查找的值
+ * @returns {string} key  返回的 key
+ */
+export function findKeyByValue(target: { [key: string]: string }, value: string): string {
+  const keys = Reflect.ownKeys(target) as Array<string>
+  for (let i = 0; i < keys.length; i++) {
+    if (target[keys[i]] === value) {
+      return keys[i]
+    }
+  }
+  return ''
+}
+
+/**
  * @description 将 utc 格式转换为北京时间
  * @param {string} date -utc 时间字符串
  * @returns {string} 北京时间
@@ -69,7 +118,11 @@ export function getMousePos(event: any) {
 
 /* eslint-disable */
 export function HtmlEncode(text: string) {
-  return text.replace(/&/g, '&').replace(/\"/g, '"').replace(/</g, '<').replace(/>/g, '>')
+  return text
+    .replace(/&/g, '&')
+    .replace(/\"/g, '"')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
 }
 
 // base64 encode
@@ -226,7 +279,7 @@ export const isIphonex = () => {
     if (!isIOS) return false
     const { devicePixelRatio, screen } = window
     const { width, height } = screen
-    return xSeriesConfig.some((item) => item.devicePixelRatio === devicePixelRatio && item.width === width && item.height === height)
+    return xSeriesConfig.some(item => item.devicePixelRatio === devicePixelRatio && item.width === width && item.height === height)
   }
   return false
 }

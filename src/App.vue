@@ -1,34 +1,37 @@
 <template>
-  <div id="app">
-    <full-loading :show="fullLoading" :text="loadingText" />
-    <div id="nav">
-      <router-link to="/">Home</router-link> | <router-link to="/about">About</router-link> | <router-link to="/contact">Contact</router-link> |
-      <router-link to="/tests">组件测试</router-link>
+  <a-config-provider :locale="currentLanguage">
+    <div id="app">
+      <full-loading :show="fullLoading" :text="loadingText" />
+      <app-layout />
     </div>
-    <router-view />
-  </div>
+  </a-config-provider>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import AppLayout from '@/layout/AppLayout.vue'
+import { Locales } from '@/i18n/index'
+import { useStore } from 'vuex'
+import { StateType } from '@types'
 
 const App = defineComponent({
-  data() {
+  setup() {
+    const store = useStore<StateType>()
+    const fullLoading = computed(() => store.state.app.fullLoading)
+    const loadingText = computed(() => store.state.app.loadingText)
+    const currentLanguage = computed(() => Locales[store.state.app.language])
+
     return {
-      book: { pageName: 'hah' },
-      hello: 'iis'
+      currentLanguage,
+      loadingText,
+      fullLoading,
+      Locales
     }
   },
-  computed: {
-    fullLoading() {
-      return this.$store.state.fullLoading
-    },
-    loadingText() {
-      return this.$store.state.loadingText
-    }
+  components: {
+    AppLayout
   }
 })
-
 export default App
 </script>
 
